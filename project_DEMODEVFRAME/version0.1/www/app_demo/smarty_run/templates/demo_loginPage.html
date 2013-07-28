@@ -1,0 +1,26 @@
+{* 登录页面 *}
+{* 页首 *}
+{include file="public_header.html"}
+<script language="javascript" src="{$smarty.const.MPF_C_APP_JS_URL}demo_loginPage.js"></script>
+<body onkeypress="keyDownLogin(event)">
+<form method='post' action='{tplEchoUrl mainName='MainHome.php' cmd='demo_login' vName='isAjax' vValue=1}' id="formLogin">
+<table align="center" style="width:250px;">
+<tr>
+    <td width='60'>用户名</td>
+    <td align='left'><input type="text" name="loginName_" id="loginName" /></td>
+</tr>
+<tr>
+    <td>密码</td>
+    <td align='left'><input type="password" name="pass_" id="pass" /></td>
+</tr>
+<tr>
+    <td colspan='2' align="center">
+        <button type='button' onClick="login(jCf.$('formLogin'));">登陆</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type='reset'>清空</button>
+    </td>
+</tr>
+</table>
+</form>
+</body>
+{* 页尾 *}
+{include file="public_footer.html"}

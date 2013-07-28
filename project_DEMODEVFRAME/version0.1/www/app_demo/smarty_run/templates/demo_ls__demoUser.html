@@ -1,0 +1,34 @@
+{* 列表用户 *}
+{* 页首 *}
+{include file="public_header.html"}
+<script language="javascript">
+{literal}
+{/literal}
+</script>
+<body>
+<form id="listForm" method="post">
+<table align="center" border=1 style="width:98%;">
+<tr>
+    <td width="30">ID</td>
+    <td width="80">用户</td>
+    <td width="80">密码</td>
+    <td width="60">状态</td>
+</tr>
+{foreach from=$objsDemoUserEt item=oDemoUserEt}
+<tr>
+    <td width="30">{$oDemoUserEt->get_uid()|escape:html|default:"&nbsp;"}</td>
+    <td width="80">
+        {$oDemoUserEt->get_lgName()|escape:html|default:"&nbsp;"}
+    </td>
+    <td width="80">{$oDemoUserEt->get_upass()|escape:html|default:"&nbsp;"}</td>
+    <td width="60">{$oDemoUserEt->getUserStatusName()|default:"&nbsp;"}</td>
+</tr>
+{/foreach}
+</table>
+<table align="center" cellspacing="0" cellpadding="2" style="width:98%;">
+<tr><td align="right">{$oAppPage->echoPage()}</td></tr>
+</table>
+</form>
+</body>
+{* 页尾 *}
+{include file="public_footer.html"}
