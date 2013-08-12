@@ -22,8 +22,10 @@ require_once(MPFFRAME_PATH.'FrameCommon.php');
 define('SMARTY_RUN_DIR', $oCf->getPath('./smarty_run/'));
 require_once(MPFFRAME_PATH.'class/AppConfigBase.php');  /* 包含模块配置基类 */
 
+define('MPF_IN_IT', TRUE);    /* judge is in mpf */
 define('MPF_C_MAIN_HOMEDOMAIN', 'demodevframe.com');    /* 主站域名 */
 define('MPF_C_HOMEDOMAIN', 'demodevframe.com');    /* 模块域名 */
+define('MPF_C_PREURL', (strrpos($_SERVER['REQUEST_URI'], '/') === 0) ? '/' : substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/')));    /* !!! 模块URL前缀 */
 define('MPF_C_COOKIE_DOMAIN', '.demodevframe.com');    /* 网站cookie域 */
 define('MPF_C_COOKIE_LEFT_TIME', 0);    /* cookie有效期 */
 define('MPF_C_COOKIE_PATH', '/');    /* cookie路径 */
