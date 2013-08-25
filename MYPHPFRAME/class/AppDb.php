@@ -1,6 +1,6 @@
 <?php
 /** 
- * 基本数据库类，类对象初始化时没有连接到数据库 
+ * mysql基本数据库类，类对象初始化时没有连接到数据库 
  * 
  * @since  2010-1-1
  * @author Wu ZeTao <578014287@qq.com>
@@ -106,8 +106,10 @@ Class AppDb {
      * 注:mysql_data_seek()只能和mysql_query()结合起来使用，而不能用于mysql_unbuffered_query()。 
      */
     function doSeek($row_number) {
-        $this->row_number=mysql_data_seek($this->result,$row_number) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Seek fail!<br>' . mysql_errno() . ": " . mysql_error(), ERR_TOP);
-        return $this->row_number;
+        if (mysql_data_seek($this->result,$row_number))
+            return ($this->row_number = $row_number);
+        else
+            Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Seek fail!<br>' . mysql_errno() . ": " . mysql_error(), ERR_TOP);
     }
 
     /**
@@ -146,7 +148,7 @@ Class AppDb {
      */
     function getLastInsertId() {
         $this->doQuery('select last_insert_id() as last_insert_id');
-        $row=mysql_fetch_array($this->result);
+        $row = $this->getOneRecord();
         $last_insert_id=$row['last_insert_id'];
         return $last_insert_id;
     }
@@ -183,6 +185,16 @@ Class AppDb {
     function commitAffair() {
         $sql = 'commit';
         mysql_query($sql, $this->link_id) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Commit affair fail!<br>' . mysql_errno() . ": " . mysql_error(), ERR_TOP);
+    }
+    
+    /**
+     * 返回转义过的用单引号括取来的值，用于db操作
+     *
+     * @param  String  $value
+     * @return  String
+     */
+    function quote($value) {
+        return '\'' . mysql_real_escape_string($value, $this->link_id) . '\'';
     }
     
 

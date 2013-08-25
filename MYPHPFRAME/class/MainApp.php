@@ -49,7 +49,20 @@ Abstract Class MainApp {
         self::$oSmt = self::$oClk->newObj('AppSmarty');
         self::$oSession = self::$oClk->newObj('AppSession');
         self::$oCookie = self::$oClk->newObj('AppCookie');
-        self::$oDb = self::$oClk->newObj('AppDb');
+        if (defined('MPF_C_DB_CONNECTION_TYPE')) {
+            if (MPF_C_DB_CONNECTION_TYPE == 'mysqli') {
+                self::$oClk->includeClass('AppDb'); /* 预包含 */
+                self::$oDb = self::$oClk->newObj('AppDbi');
+            } elseif (MPF_C_DB_CONNECTION_TYPE == 'mysql') {
+                self::$oDb = self::$oClk->newObj('AppDb');
+            } else {
+                define('MPF_C_DB_CONNECTION_TYPE', 'mysql');
+                self::$oDb = self::$oClk->newObj('AppDb');
+            }
+        } else {
+            define('MPF_C_DB_CONNECTION_TYPE', 'mysql');
+            self::$oDb = self::$oClk->newObj('AppDb');
+        }
 
         self::$oCf->oV = self::$oClk->newObj('Verify');
         self::$oCf->oDt = self::$oClk->newObj('DT');
@@ -60,7 +73,7 @@ Abstract Class MainApp {
         self::setTpl(self::$oCf->getPath(self::$oSmt->template_dir) . "public_error.html");   /* 默认输出到报错模板 */
         self::$tplVars = &self::$oSmt->_tpl_vars;   /* attention!!! */
         
-        /* 预包含的类 */
+        /* 预包含 */
         self::$oClk->includeClass('AppClass');
         self::$oClk->includeClass('AppDo');
         self::$oClk->includeClass('Et');

@@ -36,6 +36,7 @@ Class ClassLink {
         $this->reg($base, 'AppSession', $path . 'AppSession.php');
         $this->reg($base, 'AppCookie', $path . 'AppCookie.php');
         $this->reg($base, 'AppDb', $path . 'AppDb.php');
+        $this->reg($base, 'AppDbi', $path . 'AppDbi.php');
         $this->reg($base, 'Verify', $path . 'Verify.php');
         $this->reg($base, 'DT', $path . 'DT.php');
         $this->reg($base, 'BasePage', $path . 'BasePage.php');

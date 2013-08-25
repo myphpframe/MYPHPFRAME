@@ -126,7 +126,7 @@ Class Error {
                 case ERR_HIGH:
                     self::addErr($cmd, $errKey, $errInfo, $errDegree);
                     echo '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-                    MainApp::setTpl(MainApp::$oCf->getPath(MainApp::$oSmt->template_dir) . "public_error.html");
+                    MainApp::setTpl('public_error.html');
                     MainApp::cmEnd();
                     MainApp::display();
                     if ($_SERVER['HTTP_REFERER']) {

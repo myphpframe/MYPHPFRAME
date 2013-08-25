@@ -22,9 +22,13 @@ require_once(MPFFRAME_PATH.'FrameCommon.php');
 define('SMARTY_RUN_DIR', $oCf->getPath('./smarty_run/'));
 require_once(MPFFRAME_PATH.'class/AppConfigBase.php');  /* 包含模块配置基类 */
 
+/* 各模块域名 */
+define('MPF_C_HOMEDOMAIN_DEMO', 'demodevframe.com');    /* DEMO模块域名 */
+define('MPF_C_HOMEDOMAIN_COMMENT', 'comment.demodevframe.com');    /* COMMENT模块域名（实际并不存在，这里只是作为演示） */
+
 define('MPF_IN_IT', TRUE);    /* judge is in mpf */
 define('MPF_C_MAIN_HOMEDOMAIN', 'demodevframe.com');    /* 主站域名 */
-define('MPF_C_HOMEDOMAIN', 'demodevframe.com');    /* 模块域名 */
+define('MPF_C_HOMEDOMAIN', MPF_C_HOMEDOMAIN_DEMO);    /* 模块域名 */
 define('MPF_C_PREURL', (strrpos($_SERVER['REQUEST_URI'], '/') === 0) ? '/' : substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/')));    /* !!! 模块URL前缀 */
 define('MPF_C_COOKIE_DOMAIN', '.demodevframe.com');    /* 网站cookie域 */
 define('MPF_C_COOKIE_LEFT_TIME', 0);    /* cookie有效期 */
@@ -52,6 +56,7 @@ define('MPF_C_APP_CLASS_PATH_ITFCLIENT', $oCf->getPath('../publicClass/interface
 define('MPF_C_APP_WRPRIVATE_PATH', $oCf->getPath('../wrDir/private/'.strtolower(MPF_C_APPNAME).'/'));    /* 模块私有写目录路径 */
 define('MPF_C_APP_WRPUBLIC_PATH', $oCf->getPath('../wrDir/public/'.strtolower(MPF_C_APPNAME).'/'));    /* 模块公共写目录路径 */
 define('MPF_C_APP_WRPUBLIC_URL', 'http://'.MPF_C_HOMEDOMAIN.'/wrDir/public/'.strtolower(MPF_C_APPNAME).'/');    /* 模块公共写目录web路径 */
+define('MPF_C_DB_CONNECTION_TYPE', 'mysql');    /* db连接类型（mysql/mysqli） */
 define('MPF_C_TBPREFIX', 'mpf_');    /* 数据库表名前缀 */
 define('MPF_C_TIMEZONE', 'PRC');    /* 时区 */
 date_default_timezone_set(MPF_C_TIMEZONE);
@@ -76,12 +81,12 @@ $mpf_config = array (
     'apps' => array (
         MPF_C_APPNAME_DEMO => array (   /* DEMO模块 */
             'appName' => MPF_C_APPNAME_DEMO,    /* 模块名 */
-            'domain' => MPF_C_HOMEDOMAIN, /* 模块所在域名 */
+            'domain' => MPF_C_HOMEDOMAIN_DEMO, /* 模块所在域名 */
             'dir' => 'app_demo'    /* 模块所在目录 */
         ),
         MPF_C_APPNAME_COMMENT => array (    /* COMMENT模块 */
             'appName' => MPF_C_APPNAME_COMMENT,
-            'domain' => MPF_C_HOMEDOMAIN,
+            'domain' => MPF_C_HOMEDOMAIN_COMMENT,
             'dir' => 'app_comment'
         )
     )
