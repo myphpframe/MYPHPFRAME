@@ -32,6 +32,8 @@ Class BasePage {
     public $rows=array();
     /* 数据库类对象 */
     public $oDb;
+    /* 数据库结果 */
+    public $result;
 
     /* 构造函数。 */
     public function __construct() {
@@ -46,7 +48,8 @@ Class BasePage {
         $current_page_num = ($current_page_num < 1) ? 1 : $current_page_num;
         $records_num_per_page = ($records_num_per_page < 1) ? 15 : $records_num_per_page;
         $this->oDb=$oDb;
-        $this->total_rows_num=$this->oDb->getNumRows();
+        $this->result = $oDb->result;
+        $this->total_rows_num=$this->oDb->getNumRows($this->result);
         $this->records_num_per_page=$records_num_per_page;
         $this->total_pages_num=ceil($this->total_rows_num/$this->records_num_per_page);
         $this->current_page_num=
@@ -69,10 +72,10 @@ Class BasePage {
             $j=0;
             for ($i=$this->current_page_first_record_id; $i<=$this->current_page_last_record_id; $i++)
             {
-                $this->oDb->doSeek($i);
-                $this->oDb->getOneRecord();
+                $this->oDb->doSeek($this->result, $i);
+                $record = $this->oDb->getOneRecord($this->result);
                 $this->rows[$j]=array();
-                while(list($key,$val)=each($this->oDb->record))
+                while(list($key,$val)=each($record))
                 {
                     $this->rows[$j][$key]=$val;
                 }
@@ -118,8 +121,9 @@ Class AppPage extends BasePage {
         $records_num_per_page = ($records_num_per_page < 1) ? 15 : $records_num_per_page;
         $linkNumPerLine = ($linkNumPerLine < 1) ? 10 : $linkNumPerLine;
         $this->oDb=$oDb;
+        $this->result = $oDb->result;
         /* 记录总行数 */
-        $this->total_rows_num=$this->oDb->getNumRows();
+        $this->total_rows_num=$this->oDb->getNumRows($this->result);
         /* 每页记录行数 */
         $this->records_num_per_page=$records_num_per_page;
         /* 页面总数 */

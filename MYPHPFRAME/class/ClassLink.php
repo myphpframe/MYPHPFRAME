@@ -51,6 +51,16 @@ Class ClassLink {
     }
     
     /**
+     * 判断是否注册了对应类
+     *
+     * @param  String  $className
+     * @return  Boolean
+     */
+    public function hasReg($className) {
+        return (isset($this->infos[$className]) ? true : false);
+    }
+    
+    /**
      * 注册一个类
      *
      * @param  String  $type  类的类型
@@ -58,8 +68,8 @@ Class ClassLink {
      * @param  String  $path  类文件的路径（包括文件名）
      */
     public function reg($type, $name, $path = NULL) {
-        if (isset($this->infos[$name])) {
-            Error::alert('reg', __METHOD__ . ',line:' . __LINE__ . '.' . 'Can not rereg class:'.$name.'!', ERR_TOP);
+        if ($this->hasReg($name)) {
+            Error::alert('reg', __METHOD__ . ',line:' . __LINE__ . '.' . 'Can not repeat reg class:'.$name.'!', ERR_TOP);
         }
         switch ($type) {
             case MainApp::$oCt->getReserve():

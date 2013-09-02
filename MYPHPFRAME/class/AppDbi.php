@@ -20,7 +20,7 @@ Class AppDbi Extends AppDb {
     function connect() {
         $this->link_id = mysqli_connect($this->db_server_address,$this->db_user,$this->db_password) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Connect db fail!', ERR_TOP);
         $sql = "set names 'utf8'";
-        mysqli_query($this->link_id, $sql) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Can not set names!<br>' . mysqli_errno() . ": " . mysqli_error(), ERR_TOP);
+        mysqli_query($this->link_id, $sql) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Can not set names!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
         mysqli_select_db($this->link_id, $this->db_name) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Select db fail!', ERR_TOP);
         return $this->link_id;
     }
@@ -36,7 +36,7 @@ Class AppDbi Extends AppDb {
         if (!$this->link_id) {
             $this->connect();
         }
-        $this->result=mysqli_query($this->link_id, $sql) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . "Query fail!$info<br>" . mysqli_errno() . ": " . mysqli_error(), ERR_TOP);
+        $this->result=mysqli_query($this->link_id, $sql) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . "Query fail!$info<br>" . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
         $this->row_number=0;
         return $this->result;
     }
@@ -58,9 +58,10 @@ Class AppDbi Extends AppDb {
      * 提取并返回select查询结果集$this->result中的一行记录$this->record，
      * 并使数据库记录指针$this->row_number移向下一个记录（如果还有记录的话）
      */
-    function getOneRecord() {
+    function getOneRecord($result) {    
         /* 对mysql_fetch_array()函数，如果结果中的两个或以上的列具有相同字段名，最后一列将优先。要访问同名的其它列，必须用该列的数字索引或给该列起个别名。对有别名的列，不能再用原来的列名访问其内容。 */
-        if($this->record=mysqli_fetch_array($this->result))
+        //if($this->record=mysqli_fetch_array($this->result))
+        if($this->record=mysqli_fetch_array($result)) 
             $this->row_number+=1;
         return $this->record;
     }
@@ -73,11 +74,12 @@ Class AppDbi Extends AppDb {
      * row_number的取值范围应该从0到mysql_num_rows-1。 
      * 注:mysql_data_seek()只能和mysql_query()结合起来使用，而不能用于mysql_unbuffered_query()。 
      */
-    function doSeek($row_number) {
-        if (mysqli_data_seek($this->result,$row_number))
+    function doSeek($result, $row_number) {     //不可直接使用$this->result，防止多次查询result冲突问题。
+        //if (mysqli_data_seek($this->result,$row_number))
+        if (mysqli_data_seek($result,$row_number))
             return ($this->row_number = $row_number);
         else
-            Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Seek fail!<br>' . mysqli_errno() . ": " . mysqli_error(), ERR_TOP);
+            Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Seek fail!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
     }
 
     /**
@@ -91,24 +93,27 @@ Class AppDbi Extends AppDb {
     /**
      * 返回资源标识符$this->result所标识的结果集中行的数目。此命令仅对SELECT语句有效
      */
-    function getNumRows() {
-        $num_rows=mysqli_num_rows($this->result);
+    function getNumRows($result) {     //不可直接使用$this->result，防止多次查询result冲突问题。
+        //$num_rows=mysqli_num_rows($this->result);
+        $num_rows=mysqli_num_rows($result);
         return $num_rows;
     }
 
     /**
      * 取得结果集中字段的数目
      */
-    function getNumFields() {
-        $num_fields=mysqli_num_fields($this->result);
+    function getNumFields($result) {   //不可直接使用$this->result，防止多次查询result冲突问题。
+        //$num_fields=mysqli_num_fields($this->result);
+        $num_fields=mysqli_num_fields($result);
         return $num_fields;
     }
 
     /**
      * 释放所有与资源标识符$this->result所关联的内存
      */
-    function freeResult() {
-        mysqli_free_result($this->result) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Free result fail!<br>' . mysqli_errno() . ": " . mysqli_error(), ERR_TOP);
+    function freeResult($result) {     //不可直接使用$this->result，防止多次查询result冲突问题。
+        //mysqli_free_result($this->result) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Free result fail!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
+        mysqli_free_result($result) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Free result fail!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
     }
 
     /**
@@ -119,7 +124,7 @@ Class AppDbi Extends AppDb {
             $this->connect();
         }
         $sql = 'begin';
-        mysqli_query($sql, $this->link_id) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Begin affair fail!<br>' . mysqli_errno() . ": " . mysqli_error(), ERR_TOP);
+        mysqli_query($this->link_id, $sql) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Begin affair fail!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
     }
 
     /**
@@ -127,7 +132,7 @@ Class AppDbi Extends AppDb {
      */
     function rollback($info = '') {
         $sql = 'rollback';
-        mysqli_query($sql, $this->link_id) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . "Rollback fail!$info<br>" . mysqli_errno() . ": " . mysqli_error(), ERR_TOP);
+        mysqli_query($this->link_id, $sql) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . "Rollback fail!$info<br>" . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
     }
 
     /**
@@ -135,7 +140,7 @@ Class AppDbi Extends AppDb {
      */
     function commitAffair() {
         $sql = 'commit';
-        mysqli_query($sql, $this->link_id) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Commit affair fail!<br>' . mysqli_errno() . ": " . mysqli_error(), ERR_TOP);
+        mysqli_query($this->link_id, $sql) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Commit affair fail!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
     }
     
     /**
@@ -145,6 +150,9 @@ Class AppDbi Extends AppDb {
      * @return  String
      */
     function quote($value) {
+        if (!$this->link_id) {
+            $this->connect();
+        }
         return '\'' . mysqli_real_escape_string($this->link_id, $value) . '\'';
     }
     

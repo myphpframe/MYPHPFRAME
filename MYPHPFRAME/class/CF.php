@@ -222,7 +222,8 @@ Class CF {  /* CF是Common Function的缩写 */
      * @param  Array  $getParames  get参数数组（例如：array('pg' => 123)）
      * @param  Boolean  $getAbsoluteUrl  标记是否返回完整地址
      */
-    public function makeUrl($appName, $mainName, $cmd, $getParams = NULL, $getAbsoluteUrl = false) {
+    public function makeUrl($appName, $mainName, $cmd, $getParams = array(), $getAbsoluteUrl = false) {
+        if (!$appName && !$mainName && !$cmd && !$getParams && !$getAbsoluteUrl) return ''; //only used for json retrun
         $sameApp = false;   /* 标记是否是在同一个模块 */
         if (!$appName) $appName = MPF_C_APPNAME;
         if ($appName == MPF_C_APPNAME) {
@@ -271,17 +272,22 @@ Class CF {  /* CF是Common Function的缩写 */
             } else {
                 $cmdStr = "";
             }
+            if (!$cmdStr && !$str) {
+                $newStr = '';
+            } else {
+                $newStr = "?$cmdStr$str";
+            }
             if ($sameApp && !$getAbsoluteUrl) {
                 if ($mainName) {
-                    return "$mainName?$cmdStr".$str;
+                    return "$mainName$newStr";
                 } else {
-                    return "?$cmdStr".$str;
+                    return "$newStr";
                 }
             } else {
                 if ($mainName) {
-                    return $appUrl."/$mainName?$cmdStr".$str;
+                    return $appUrl."/$mainName$newStr";
                 } else {
-                    return $appUrl."/?$cmdStr".$str;
+                    return $appUrl."/$newStr";
                 }
             }
         }
@@ -295,12 +301,12 @@ Class CF {  /* CF是Common Function的缩写 */
      * @param  String  $mainAppName  主程序名（例如MainHomePage.php）
      * @param  String  $cmd  命令名
      * @param  Array  $getParames  get参数数组（例如：array('pg' => 123)）
-     * @param  Mixed  $returnData  返回的数据（对于delayRedirect返回则是返回对应的提示信息和延迟的秒数，对于ajax返回则是返回对应的数据格式的数据。）
+     * @param  Array  $returnData  返回的数据（对于delayRedirect返回则是返回对应的提示信息和延迟的秒数，对于ajax返回则是返回对应的数据格式的数据。）
      * @param  Mixed  $returnFormat  返回的数据格式（只对ajax返回有效），'json'表示返回json数据（默认）
      * @param  Boolean  $getAbsoluteUrl  标记是否返回完整地址
      * @param  Boolean  $needReturnUrl  标记是否需要返回地址url（即标记是否需要跳转）
      */
-    public function pageReturn($type, $appName, $mainName, $cmd, $getParams = NULL, $returnData = NULL, $returnFormat = 'json', $getAbsoluteUrl = false, $needReturnUrl = true) {
+    public function pageReturn($type, $appName, $mainName, $cmd, $getParams = array(), $returnData = array(), $returnFormat = 'json', $getAbsoluteUrl = false, $needReturnUrl = true) {
         if (MainApp::$isAjax) {
             $type = 'ajax';
         } else {
@@ -319,7 +325,8 @@ Class CF {  /* CF是Common Function的缩写 */
                 'status' => $returnData['status'],
                 'info' => $returnData['info'],
                 'redirectUrl' => $url,
-                'redirectTarget' => ($returnData['redirectTarget'] ? $returnData['redirectTarget'] : '_self')
+                'redirectTarget' => ($returnData['redirectTarget'] ? $returnData['redirectTarget'] : '_self'),
+                'delaySec' => ($returnData['delaySec'] ? $returnData['delaySec'] : 5)
             );
             if ($returnData['returnData']) {
                 $ret['returnData'] = $returnData['returnData'];
@@ -335,6 +342,9 @@ Class CF {  /* CF是Common Function的缩写 */
                 'redirectTarget' => ($returnData['redirectTarget'] ? $returnData['redirectTarget'] : '_self'),
                 'delaySec' => ($returnData['delaySec'] ? $returnData['delaySec'] : 5)
             );
+            if ($returnData['returnData']) {
+                $delayRedirectData['returnData'] = $returnData['returnData'];
+            }
             MainApp::cmEnd();
             MainApp::setTpl(MainApp::$delayRedirectTpl);
             MainApp::assign('dfvDelayRedirectData', $delayRedirectData);

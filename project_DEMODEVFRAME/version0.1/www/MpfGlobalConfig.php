@@ -56,7 +56,7 @@ define('MPF_C_APP_CLASS_PATH_ITFCLIENT', $oCf->getPath('../publicClass/interface
 define('MPF_C_APP_WRPRIVATE_PATH', $oCf->getPath('../wrDir/private/'.strtolower(MPF_C_APPNAME).'/'));    /* 模块私有写目录路径 */
 define('MPF_C_APP_WRPUBLIC_PATH', $oCf->getPath('../wrDir/public/'.strtolower(MPF_C_APPNAME).'/'));    /* 模块公共写目录路径 */
 define('MPF_C_APP_WRPUBLIC_URL', 'http://'.MPF_C_HOMEDOMAIN.'/wrDir/public/'.strtolower(MPF_C_APPNAME).'/');    /* 模块公共写目录web路径 */
-define('MPF_C_DB_CONNECTION_TYPE', 'mysql');    /* db连接类型（mysql/mysqli） */
+define('MPF_C_DB_CONNECTION_TYPE', 'mysqli');    /* db连接类型（mysql/mysqli） */
 define('MPF_C_TBPREFIX', 'mpf_');    /* 数据库表名前缀 */
 define('MPF_C_TIMEZONE', 'PRC');    /* 时区 */
 date_default_timezone_set(MPF_C_TIMEZONE);

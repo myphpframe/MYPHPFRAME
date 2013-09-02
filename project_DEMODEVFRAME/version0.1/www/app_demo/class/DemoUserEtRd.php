@@ -23,7 +23,7 @@ Class DemoUserEtRd Extends AppDo {
     public function doDemoLogin($oDemoUserEt) {
         $sql = "select * from ".$this->tbPrefix."demo_user where lg_name = '".addslashes($oDemoUserEt->get_lgName())."' and upass = '".addslashes($oDemoUserEt->get_upass())."'";
         $result = $this->oDb->doQuery($sql, __METHOD__ . ',line:' . __LINE__ . '.' . 'Can not read!');
-        if ($record = mysql_fetch_array($result)) {
+        if ($record = $this->oDb->getOneRecord($result)) {
             $oDemoUserEt->initByRecord($record);
             MainApp::$oSession->sessionStart();
             MainApp::$oSession->setVar('CDemoUserEt', $oDemoUserEt);

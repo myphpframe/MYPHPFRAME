@@ -87,6 +87,27 @@ Class Error {
             self::$errInfoList[] = $oErrorInfo;
         }
     }
+    
+    /**
+     * 获取最后一个错误信息
+     *
+     * @param  String  $cmd  操作码
+     * @return  Mixed
+     */
+    public static function getLatestErrorValue($cmd = NULL) {
+        if (!$cmd) {
+            $cmd = MainApp::$cmd;
+        }
+        if (isset(self::$errInfo[$cmd]) && self::$errInfo[$cmd]) {
+            $tempArr = self::$errInfo[$cmd];
+            while ($oErrorInfo = array_pop($tempArr)) {
+                if (!$oErrorInfo->isErrInfo()) {
+                    return $oErrorInfo->errValue;
+                }
+            }
+        }
+        return false;   //found no error
+    } 
    
     /**
      * 显示错误信息
@@ -101,13 +122,11 @@ Class Error {
      * 3、普通级：ERR_APP，应用程序中普通的错误，并不停止程序运行，用smarty模板输出错误信息；
      * 4、信息级：ERR_INFO，应用程序中输出一些辅助信息（例如操作成功之类的），并不停止程序运行，用smarty模板输出信息；
      */
-    public static function alert($errKey = '', $errInfo = 'error!', $errDegree = ERR_HIGH, $retData = NULL) {
+    public static function alert($errKey = '', $errInfo = 'error!', $errDegree = ERR_HIGH, $retData = array()) {
         /* 操作码 */
         $cmd = MainApp::$cmd;
         if (MainApp::$isAjax) {
-            //MainApp::$oCf->pageReturn('ajax', '', '', '', '', $retData);
-            MainApp::$oCf->pageReturn('ajax', '', '', '', '', array('status' => $errDegree, 'info' => $errInfo));
-            //self::$oCf->pageReturn('', '', 'MainHome.php', 'demo_loginPage', '', array('status' => ERR_APP, 'info' => MainApp::$oCf->_L('cm_param_error')));
+            MainApp::$oCf->pageReturn('', '', '', '', '', array('status' => $errDegree, 'info' => $errInfo, 'returnData' => $retData));
         } else {
             if ($errKey == '') {
                 $errKey = '_default_error_key_';   /* 默认的错误信息条目的key */

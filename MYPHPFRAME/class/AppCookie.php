@@ -59,7 +59,8 @@ Class AppCookie {
      * @param  Boolean  $httponly
      */
     public function delVar($varName, $varValue = '', $expire = -360000, $path = MPF_C_COOKIE_PATH, $domain = MPF_C_COOKIE_DOMAIN, $secure = MPF_C_COOKIE_SECURE, $httponly = MPF_C_COOKIE_HTTPONLY) {
-        setcookie($varName, $varValue, time() + $expire, $path, $domain, $secure, $httponly);
+        if ($this->hasVar($varName))
+            setcookie($varName, $varValue, time() + $expire, $path, $domain, $secure, $httponly);
     }
     
     /**

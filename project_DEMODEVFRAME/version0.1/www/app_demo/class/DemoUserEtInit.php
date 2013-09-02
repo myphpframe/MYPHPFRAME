@@ -23,7 +23,7 @@ Class DemoUserEtInit Extends AppDo {
     public function initDemoUserEtById($uid) {
         $sql = "select * from ".$this->tbPrefix."demo_user where uid = '".addslashes($uid)."'";
         $result = $this->oDb->doQuery($sql, __METHOD__ . ',line:' . __LINE__ . '.' . 'Can not read!');
-        if ($record = mysql_fetch_array($result)) {
+        if ($record = $this->oDb->getOneRecord($result)) {
             $oDemoUserEt = MainApp::$oClk->newObj('DemoUserEt');
             $oDemoUserEt->initByRecord($record);
             return $oDemoUserEt;

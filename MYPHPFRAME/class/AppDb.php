@@ -1,6 +1,7 @@
 <?php
 /** 
  * mysql基本数据库类，类对象初始化时没有连接到数据库 
+ * 这个类将被废除，用AppDbi类取代
  * 
  * @since  2010-1-1
  * @author Wu ZeTao <578014287@qq.com>
@@ -194,6 +195,9 @@ Class AppDb {
      * @return  String
      */
     function quote($value) {
+        if (!$this->link_id) {
+            $this->connect();
+        }
         return '\'' . mysql_real_escape_string($value, $this->link_id) . '\'';
     }
     
