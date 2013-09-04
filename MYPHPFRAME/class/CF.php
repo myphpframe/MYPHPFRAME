@@ -331,7 +331,7 @@ Class CF {  /* CF是Common Function的缩写 */
             if ($returnData['returnData']) {
                 $ret['returnData'] = $returnData['returnData'];
             }
-            //header('Content-type: application/json');
+            header('Content-type: application/json');
             echo json_encode($ret);
             die();
         } elseif ($type == 'delayRedirect') {

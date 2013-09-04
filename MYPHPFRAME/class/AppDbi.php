@@ -5,13 +5,45 @@
  * @since  2013-8-25
  * @author Wu ZeTao <578014287@qq.com>
  */
-Class AppDbi Extends AppDb {
+Class AppDbi {
+    
+    /* 数据库名 */
+    var $db_name;
+    /* 数据库ip地址或域名 */
+    var $db_server_address;
+    /* 数据库用户名 */
+    var $db_user;
+    /* 数据库密码 */
+    var $db_password;
+
+    /* 数据库连接标识 */
+    var $link_id;
+    /* $result存储mysql_query（）函数进行select，show，explain 或 describe 操作返回的资源标识符，如果查询执行不正确则返回 false。对于其它类型的 sql 语句，mysql_query() 在执行成功时返回 true，出错时返回 false。*/
+    var $result;
+    /* 数据库查询获得的单条纪录的结果数组 */
+    var $record;
+    /* 数据库记录指针，指向当前记录 */
+    var $row_number;
 
     /**
      * 构造函数
      */
     function __construct() {
-        parent::__construct();
+    }
+    
+    /**
+     * 准备连接数据库（初始化相关参数）
+     *
+     * @param  String  $dbName  数据库名
+     * @param  String  $ip  ip地址
+     * @param  String  $user  用户名
+     * @param  String  $pass  密码
+     */
+    function prepareConnect($dbName, $ip, $user, $pass) {
+        $this->db_name = $dbName;
+        $this->db_server_address = $ip;
+        $this->db_user = $user;
+        $this->db_password = $pass;
     }
 
     /**
@@ -106,6 +138,23 @@ Class AppDbi Extends AppDb {
         //$num_fields=mysqli_num_fields($this->result);
         $num_fields=mysqli_num_fields($result);
         return $num_fields;
+    }
+      
+    /**
+     * 返回结果集中指向当前记录的数值索引号
+     */
+    function getRowNumber() {
+        return $this->row_number;
+    }
+
+    /**
+     * 返回给定的数据库连接标识$this->link_id中上一步INSERT查询中产生的AUTO_INCREMENT的ID号
+     */
+    function getLastInsertId() {
+        $result = $this->doQuery('select last_insert_id() as last_insert_id');
+        $row = $this->getOneRecord($result);
+        $last_insert_id=$row['last_insert_id'];
+        return $last_insert_id;
     }
 
     /**

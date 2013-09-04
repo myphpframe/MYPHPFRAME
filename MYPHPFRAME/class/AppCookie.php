@@ -38,7 +38,7 @@ Class AppCookie {
      * @param  Boolean  $httponly
      * @param  Boolean  $needSerialize  标记是否需要保存序列化值
      */
-    public function setVar($varName, $varValue, $expire = MPF_C_COOKIE_LEFT_TIME, $path = MPF_C_COOKIE_PATH, $domain = MPF_C_COOKIE_DOMAIN, $secure = MPF_C_COOKIE_SECURE, $httponly = MPF_C_COOKIE_HTTPONLY, $needSerialize = true) {
+    public function setVar($varName, $varValue, $expire = MPF_C_COOKIE_LEFT_TIME, $path = MPF_C_COOKIE_PATH, $domain = MPF_C_COOKIE_DOMAIN, $secure = MPF_C_COOKIE_SECURE, $httponly = MPF_C_COOKIE_HTTPONLY, $needSerialize = false) {
         $varValue = $needSerialize ? serialize($varValue) : $varValue;
         if ($expire == 0) {
             setcookie($varName, $varValue, $expire, $path, $domain, $secure, $httponly);
@@ -69,7 +69,7 @@ Class AppCookie {
      * @param  String  $varName  变量名
      * @param  Boolean  $needUnserialize  标记是否需要反序列化值
      */
-    public function getVar($varName, $needUnserialize = true) {
+    public function getVar($varName, $needUnserialize = false) {
         return ($needUnserialize ? unserialize($_COOKIE[$varName]) : $_COOKIE[$varName]);
     }
     
