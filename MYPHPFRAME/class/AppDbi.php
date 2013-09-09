@@ -81,6 +81,9 @@ Class AppDbi {
      * @param  String  $info  回滚报错信息
      */
     function doAffairQuery($sql, $info) {
+        if (!$this->link_id) {
+            $this->connect();
+        }
         $this->result=mysqli_query($this->link_id, $sql) or $this->rollback($info);
         $this->row_number=0;
         return $this->result;
