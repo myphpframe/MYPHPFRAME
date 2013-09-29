@@ -208,6 +208,34 @@ Class AppDbi {
         return '\'' . mysqli_real_escape_string($this->link_id, $value) . '\'';
     }
     
+    /**
+     * 根据数组参数返回被逗号分隔并且每个数组元素被单引号括起来的字符串,用于sql语句中的in条件。
+     *
+     * @param  $arr  数组参数
+     * @return  Mixed  如果没有错误则返回字符串，否则返回false
+     */
+    public function getSqlIn($arr) {
+        $sqlIn = '';
+        if (is_array($arr)) {
+            if (count($arr) > 0) {
+                $flag = true;   /* 第一个数组元素标记 */
+                foreach ($arr as $value) {
+                    if ($flag) {
+                        $sqlIn .= $this->quote($value);   /* 必须使用addslashes转义并且用单引号引起来 */
+                        $flag = false;
+                    } else {
+                        $sqlIn .= ", ".$this->quote($value);
+                    }
+                }
+                return $sqlIn;
+            } else {
+                return false;   /* 数组中没有数组项 */
+            }
+        } else {
+            return false;  /* 参数错误，参数必须是数组 */
+        }
+    }
+    
 
 }
 

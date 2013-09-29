@@ -105,6 +105,8 @@ Class AppPage extends BasePage {
     /* 下几页第一页的pageNum */
     public $nextLinkLineFirstPageNum;
     
+    public $urls;   /* 分页链接数组 */
+    
     /* 构造函数。 */
     public function __construct() {
         $this->currLinkLineArray = array();
@@ -167,6 +169,21 @@ Class AppPage extends BasePage {
         }
         
         $this->get_current_page_records();
+        $this->makeUrls();
+    }
+    
+    /**
+     * 生成$this->urls
+     */
+    private function makeUrls() {
+        $this->urls['firstPageUrl'] = $this->getPageUrl($this->first_page_num);
+        $this->urls['lastPageUrl'] = $this->getPageUrl($this->last_page_num);
+        $this->urls['preLinkLineFirstPageUrl'] = $this->getPageUrl($this->preLinkLineFirstPageNum);
+        $this->urls['nextLinkLineFirstPageUrl'] = $this->getPageUrl($this->nextLinkLineFirstPageNum);
+        $this->urls['currLinkLineUrls'] = array();
+        foreach ($this->currLinkLineArray as $pageNum) {
+            $this->urls['currLinkLineUrls'][$pageNum] = $this->getPageUrl($pageNum);
+        }
     }
     
     /**
@@ -203,7 +220,7 @@ Class AppPage extends BasePage {
         //return MainApp::$oCf->makeUrl(MPF_C_APPNAME, basename($_SERVER['SCRIPT_NAME']), MainApp::$cmd, $this->makePageParamArr(MainApp::$oCf->cv($pg), $ob, $od));
         $fileName = basename($_SERVER['SCRIPT_NAME']);
         $fileName = ($fileName == 'index.php') ? '' : $fileName;
-        return MainApp::$oCf->makeUrl(MPF_C_APPNAME, $fileName, MainApp::$cmd, $this->makePageParamArr(MainApp::$oCf->cv($pg), $ob, $od));
+        return MainApp::$oCf->makeUrl(MPF_C_APPNAME, $fileName, MainApp::$cmd, $this->makePageParamArr(MainApp::$oCf->cv($pg), $ob, $od), true);
     }
     
     /**

@@ -70,7 +70,8 @@ Abstract Class MainApp {
         self::$oDt = self::$oCf->oDt;
         self::$title = "Welcome!";
         
-        self::setTpl(self::$oCf->getPath(self::$oSmt->template_dir) . "public_error.html");   /* 默认输出到报错模板 */
+        //self::setTpl(self::$oCf->getPath(self::$oSmt->template_dir) . "public_error.html");   /* 默认输出到报错模板 */
+        self::setTpl('public_error.html');   /* 默认输出到报错模板 */
         self::$tplVars = &self::$oSmt->_tpl_vars;   /* attention!!! */
         
         /* 预包含 */
@@ -161,7 +162,8 @@ Abstract Class MainApp {
      * 直接输出错误到错误信息模板
      */
     final protected function outputErr() {
-        self::setTpl(self::$oCf->getPath(self::$oSmt->template_dir) . "public_error.html");
+        //self::setTpl(self::$oCf->getPath(self::$oSmt->template_dir) . "public_error.html");
+        self::setTpl('public_error.html');
     }
     
     /**

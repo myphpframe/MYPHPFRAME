@@ -127,6 +127,7 @@ Class CF {  /* CF是Common Function的缩写 */
     
     /**
      * 根据数组参数返回被逗号分隔并且每个数组元素被单引号括起来的字符串,用于sql语句中的in条件。
+     * 这个方法将被废除
      *
      * @param  $arr  数组参数
      * @return  Mixed  如果没有错误则返回字符串，否则返回false
@@ -223,7 +224,7 @@ Class CF {  /* CF是Common Function的缩写 */
      * @param  Boolean  $getAbsoluteUrl  标记是否返回完整地址
      */
     public function makeUrl($appName, $mainName, $cmd, $getParams = array(), $getAbsoluteUrl = false) {
-        if (!$appName && !$mainName && !$cmd && !$getParams && !$getAbsoluteUrl) return ''; //only used for json retrun
+        if (!$appName && !$mainName && !$cmd && !$getParams && !$getAbsoluteUrl) return ''; //only used for json retrun,means do not need redirection
         $sameApp = false;   /* 标记是否是在同一个模块 */
         if (!$appName) $appName = MPF_C_APPNAME;
         if ($appName == MPF_C_APPNAME) {
@@ -346,7 +347,7 @@ Class CF {  /* CF是Common Function的缩写 */
                 $delayRedirectData['returnData'] = $returnData['returnData'];
             }
             MainApp::cmEnd();
-            MainApp::setTpl(MainApp::$delayRedirectTpl);
+            MainApp::setTpl(MainApp::$delayRedirectTpl);    //!!! this templet is very very important.
             MainApp::assign('dfvDelayRedirectData', $delayRedirectData);
             MainApp::display();
             die();

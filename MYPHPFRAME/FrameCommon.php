@@ -11,7 +11,7 @@ require_once(MPFFRAME_CLASS_PATH . 'CF.php');
 $oCf = new CF();    /* 公共函数对象 */
 define('SMARTY_DIR', dirname(__FILE__) . '/Smarty/libs/');     /* smarty库文件目录，必须以'/'结尾。 */
 
-/* 错误常量 */
+/* 错误常量（ref Error class） */
 define('ERR_TOP', 1); /* 最严重的错误 */
 define('ERR_HIGH', 3); /* 严重的错误 */
 define('ERR_APP', 5); /* 应用程序中普通的错误 */
