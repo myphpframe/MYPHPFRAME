@@ -165,6 +165,7 @@ Class AppDbi {
      */
     function freeResult($result) {     //不可直接使用$this->result，防止多次查询result冲突问题。
         //mysqli_free_result($this->result) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Free result fail!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
+        //Note: You should always free your result with mysqli_free_result(), when your result object is not needed anymore. 
         mysqli_free_result($result) or Error::alert('db', __METHOD__ . ',line:' . __LINE__ . '.' . 'Free result fail!<br>' . mysqli_errno($this->link_id) . ": " . mysqli_error($this->link_id), ERR_TOP);
     }
 

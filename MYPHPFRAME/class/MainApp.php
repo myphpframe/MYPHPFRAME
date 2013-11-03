@@ -49,18 +49,18 @@ Abstract Class MainApp {
         self::$oSmt = self::$oClk->newObj('AppSmarty');
         self::$oSession = self::$oClk->newObj('AppSession');
         self::$oCookie = self::$oClk->newObj('AppCookie');
-        if (defined('MPF_C_DB_CONNECTION_TYPE')) {
-            if (MPF_C_DB_CONNECTION_TYPE == 'mysqli') {
+        if (defined('MPF_C_APP_DB_CONNECTION_TYPE')) {
+            if (MPF_C_APP_DB_CONNECTION_TYPE == 'mysqli') {
                 self::$oClk->includeClass('AppDb'); /* 预包含 */
                 self::$oDb = self::$oClk->newObj('AppDbi');
-            } elseif (MPF_C_DB_CONNECTION_TYPE == 'mysql') {
+            } elseif (MPF_C_APP_DB_CONNECTION_TYPE == 'mysql') {
                 self::$oDb = self::$oClk->newObj('AppDb');
             } else {
-                define('MPF_C_DB_CONNECTION_TYPE', 'mysql');
+                define('MPF_C_APP_DB_CONNECTION_TYPE', 'mysql');
                 self::$oDb = self::$oClk->newObj('AppDb');
             }
         } else {
-            define('MPF_C_DB_CONNECTION_TYPE', 'mysql');
+            define('MPF_C_APP_DB_CONNECTION_TYPE', 'mysql');
             self::$oDb = self::$oClk->newObj('AppDb');
         }
 

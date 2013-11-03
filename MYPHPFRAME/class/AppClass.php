@@ -15,7 +15,7 @@ Abstract Class AppClass {
      */
     public function __construct() {
         $this->oDb = & MainApp::$oDb;
-        $this->tbPrefix = MPF_C_TBPREFIX;
+        $this->tbPrefix = MPF_C_APP_TBPREFIX;
     }
     
 }

@@ -1,4 +1,10 @@
-{* 内嵌于模板的错误信息 *}
+{* 错误信息 *}
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{$title}</title>
+</head>
+<body>
 {if $hasErr}    {* 错误信息 *}
 <div style="border:1px #ff0000 solid;padding:4px">
     {foreach from=$errInfoList item=oErrorInfo}
@@ -15,6 +21,7 @@
         <div>{$oErrorInfo->errValue|escape:html}</div>
         {/foreach}
     </div>
-    <br>
     {/if}
 {/if}
+</body>
+</html>

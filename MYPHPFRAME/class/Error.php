@@ -144,16 +144,9 @@ Class Error {
                     break;
                 case ERR_HIGH:
                     self::addErr($cmd, $errKey, $errInfo, $errDegree);
-                    echo '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
                     MainApp::setTpl('public_error.html');
                     MainApp::cmEnd();
                     MainApp::display();
-                    if ($_SERVER['HTTP_REFERER']) {
-                        echo '<div><a href="'.$_SERVER['HTTP_REFERER'].'">Back</a>&nbsp;&nbsp;<a href="http://'.MPF_C_HOMEDOMAIN.'">Back To Home Page</a></div>';
-                    } else {
-                        echo '<div><a href="'.MainApp::$oCf->currProtocol.'://'.MPF_C_HOMEDOMAIN.'">Back To Home Page</a></div>';
-                    }
-                    echo '</body></html>';
                     die();
                     break;
                 case ERR_APP:
