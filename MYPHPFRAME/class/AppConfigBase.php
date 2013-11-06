@@ -34,10 +34,17 @@ Class AppConfigBase {
      */
     public function getAppUrl($appName) {
         if (isset($this->interfaceSetting['apps'][$appName]) && ($app = $this->interfaceSetting['apps'][$appName])) {
+            /*
             if ($app['dir']) {
                 return MainApp::$oCf->currProtocol.'://'.$app['domain'].'/'.$app['dir'];
             } else {
                 return MainApp::$oCf->currProtocol.'://'.$app['domain'];
+            }
+            */
+            if (!$app['preurl']) {
+                return MainApp::$oCf->currProtocol.'://'.$app['domain'];
+            } else {
+                return MainApp::$oCf->currProtocol.'://'.$app['domain'].$app['preurl'];
             }
         } else {
             Error::alert('appConfig', __METHOD__ . ',line:' . __LINE__ . '.' . "Can not find app info for $appName!", ERR_TOP);

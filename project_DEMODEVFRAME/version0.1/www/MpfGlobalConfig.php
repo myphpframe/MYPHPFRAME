@@ -29,7 +29,7 @@ define('MPF_C_HOMEDOMAIN_COMMENT', 'comment.demodevframe.com');    /* COMMENT模
 define('MPF_IN_IT', TRUE);    /* judge is in mpf */
 define('MPF_C_MAIN_HOMEDOMAIN', 'demodevframe.com');    /* 主站域名 */
 define('MPF_C_HOMEDOMAIN', MPF_C_HOMEDOMAIN_DEMO);    /* 模块域名 */
-define('MPF_C_PREURL', (strrpos($_SERVER['REQUEST_URI'], '/') === 0) ? '/' : substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/')));    /* !!! 模块URL前缀 */
+define('MPF_C_PREURL', (strrpos($_SERVER['REQUEST_URI'], '/') === 0) ? '' : substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/')));    /* !!! 模块URL前缀（含模块目录名），如果没有前缀则返回空的字符串。 */
 define('MPF_C_COOKIE_DOMAIN', '.demodevframe.com');    /* 网站cookie域 */
 define('MPF_C_COOKIE_LEFT_TIME', 0);    /* cookie有效期 */
 define('MPF_C_COOKIE_PATH', '/');    /* cookie路径 */
@@ -82,12 +82,14 @@ $mpf_config = array (
         MPF_C_APPNAME_DEMO => array (   /* DEMO模块 */
             'appName' => MPF_C_APPNAME_DEMO,    /* 模块名 */
             'domain' => MPF_C_HOMEDOMAIN_DEMO, /* 模块所在域名 */
-            'dir' => 'app_demo'    /* 模块所在目录 */
+            'dir' => 'app_demo',    /* 模块所在目录 */
+            'preurl' => MPF_C_PREURL    /* 模块url前缀（含模块目录名） */
         ),
         MPF_C_APPNAME_COMMENT => array (    /* COMMENT模块 */
             'appName' => MPF_C_APPNAME_COMMENT,
             'domain' => MPF_C_HOMEDOMAIN_COMMENT,
-            'dir' => 'app_comment'
+            'dir' => 'app_comment',
+            'preurl' => MPF_C_PREURL
         )
     )
 );
