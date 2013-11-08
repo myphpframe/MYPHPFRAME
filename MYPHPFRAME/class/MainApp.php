@@ -106,8 +106,11 @@ Abstract Class MainApp {
     
     /**
      * 输出模板前的操作，一般用于输出公共smarty模板变量
+     *
+     * @param  Mixed  $oMain
+     * @param  Array  $opt
      */
-    public function cmEnd() {
+    public static function cmEnd($oMain = NULL, $opt = array()) {
         self::assign('oCf', self::$oCf);
         self::assign('errInfo', Error::$errInfo);       /* 错误信息多维数组 */
         self::assign('errInfoList', Error::$errInfoList);       /* 错误信息一维数组 */
@@ -134,7 +137,7 @@ Abstract Class MainApp {
     /**
      * 输出模板
      */
-    final public function display() {
+    final public static function display() {
         self::$oSmt->display(self::$tpl);
     }
     
@@ -144,7 +147,7 @@ Abstract Class MainApp {
      * @param  String  $name  模板变量名
      * @param  Mixed  $value  要传递到模板的变量
      */
-    final public function assign($name, &$value) {
+    final public static function assign($name, &$value) {
         /* self::$oSmt->assign_by_ref($name, $value); */
         self::$oSmt->assign($name, $value);
     }
@@ -154,7 +157,7 @@ Abstract Class MainApp {
      *
      * @param  String  模板文件名
      */
-    final public function setTpl($tpl) {
+    final public static function setTpl($tpl) {
         self::$tpl = $tpl;
     }
     

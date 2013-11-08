@@ -102,15 +102,15 @@ Class MainHome extends MainBase {
         }
     }
     
-    public function cmEnd() {
-        parent::cmEnd();
+    public static function cmEnd($oMain = NULL, $opt = array()) {
+         parent::cmEnd();
     }
     
 }
 
 $html = new MainHome();
 $html->run();
-$html->cmEnd();
+MainHome::cmEnd($html);
 $html->display();
 
 ?>

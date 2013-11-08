@@ -59,7 +59,7 @@ Abstract Class MainBase extends MainApp {
      *
      * @param  String  $v  为'php'表示用php程序仿rewrite，为'normal'表示通过http服务器配置rewrite，为'none'表示不启用rewrite；
      */
-    final protected function selectRewrite($v = 'php') {
+    final protected function selectRewrite($v = 'none') {
         parent::selectRewrite($v);
     }
     
